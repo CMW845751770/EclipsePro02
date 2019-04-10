@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<title>Document</title>
+<link rel="stylesheet" type="text/css"
+	th:href="@{../res/layui/css/layui.css}">
+<link rel="stylesheet" type="text/css" th:href="@{../res/css/main.css}">
+<script type="text/javascript" th:src="@{~/js/jquery.js}"></script>
+<script th:inline="javascript">
+$(function()
+{
+	//评论功能的实现js
+	$("#btn_comment").click(function()
+	{
+		var content = $("#content").val();
+		var contenlLen = content.length ; 
+		if(contenlLen<5)
+		{
+			alert("评论字数应大于5");
+			return false ; 
+		}else
+		{
+			var userName= [[${#httpSession.getAttribute('userName')}]] ;
+			var bid = [[${blog.id}]] ; 
+			var flag = false;
+			$.ajaxSettings.async = false;
+			$.get("/blog/insertComment", {
+				userName : userName,
+				content  : content,
+				bid:bid
+			}, function(data) {
+				if(data.msg!='success')
+				{
+					flag = true ;
+					alert("评论失败!") ; 
+					return false ; 
+				}
+			});
+			$.ajaxSettings.async = true;
+			if (flag) {
+				return false;
+			} else//如果用户名未被占用
+			{
+				alert("评论成功") ;
+				return true ; 
+			}
+		}
+	});
+});
+</script>
+<script th:inline="javascript">
+$(function()
+{
+	var pageSize = [[${blog.comments.pageSize}]] ; 
+	var pageNumber = [[${blog.comments.pageNumber}]] ;
+	var bid = [[${blog.id}]] ; 
+	var total = [[${blog.comments.total}]] ; 
+	//上一页评论的js
+	$("#prevPage").click(function()
+	{
+			pageNumber = pageNumber - 1;
+			if (pageNumber >= 1) {
+				$.ajaxSettings.async = false;
+				$.get("/blog/view", {
+				pageSize : pageSize,
+				pageNumber  : pageNumber,
+					bid:bid
+					},function(html)
+					{
+						$("body").html(html);
+					});
+				$.ajaxSettings.async = true;
+			} else {
+				pageNumber = 1;
+			}
+			return false;
+	})
+	//点击下一页的js
+	$("#nextPage").click(function()
+	{
+			pageNumber = pageNumber + 1;
+			if (pageNumber <= total) {
+				$.ajaxSettings.async = false;
+				$.get("/blog/view", {
+				pageSize : pageSize,
+				pageNumber  : pageNumber,
+					bid:bid
+					},function(html)
+					{
+						$("body").html(html);
+					});
+				$.ajaxSettings.async = true;
+			} else {
+				pageNumber = total;
+			}
+			return false;
+	})
+	
+	//点击页数的js
+	$(".defaultPage").click(function()
+	{
+		var aPageNumber=parseInt($(this).text());
+		$.ajaxSettings.async = false;
+				$.get("/blog/view", {
+				pageSize : pageSize,
+				pageNumber  : aPageNumber,
+					bid:bid
+					},function(html)
+					{
+						$("body").html(html);
+					});
+				$.ajaxSettings.async = true;
+		return false ; 
+	})
+	
+})
+</script>
+<script th:inline="javascript">
+$(function()
+{
+	var bid = [[${blog.id}]] ; 
+	var type= [[${blog.type}]] ; 
+	var pageSize = 6 ; 
+	var pageNumber = 1 ; 
+	//上一篇的js
+	$("#prevBlog").click(function()
+	{
+		var flag = 0 ; 
+		$.ajaxSettings.async = false;
+		$.get("/blog/pageTurning", {
+			bid:bid
+			,type:type
+			,flag : flag
+			,pageSize : pageSize
+			,pageNumber :pageNumber
+			},function(html)
+			{
+				if(html!=null)
+				$("body").html(html);
+			});
+		$.ajaxSettings.async = true;
+		return false ; 
+	})
+	//下一篇的js
+	$("#nextBlog").click(function()
+	{
+		var flag = 1 ;
+		$.ajaxSettings.async = false;
+		$.get("/blog/pageTurning", {
+			bid:bid
+			,type:type
+			,flag : flag
+			,pageSize : pageSize
+			,pageNumber :pageNumber
+			},function(html)
+			{
+				if(html!=null)
+				$("body").html(html);
+			});
+		$.ajaxSettings.async = true;
+		return false ; 
+	})
+	
+})
+</script>
+
+</head>
+<body>
+	<div class="header">
+		<div class="menu-btn">
+			<div class="menu"></div>
+		</div>
+		<h1 class="logo">
+			<a th:href="@{~/blog/show}"> <span>MYBLOG</span> <img
+				src="../res/img/logo.png">
+			</a>
+		</h1>
+		<div class="nav">
+			<a th:href="@{~/blog/show}">文章</a> <a href="whisper.html">微语</a> <a
+				href="leacots.html">留言</a> <a href="album.html">相册</a> <a
+				href="about.html" class="active">关于</a>
+		</div>
+		<ul class="layui-nav header-down-nav">
+			<li class="layui-nav-item"><a th:href="@{~/blog/show}"
+				class="active">文章</a></li>
+			<li class="layui-nav-item"><a href="whisper.html">微语</a></li>
+			<li class="layui-nav-item"><a href="leacots.html">留言</a></li>
+			<li class="layui-nav-item"><a href="album.html">相册</a></li>
+			<li class="layui-nav-item"><a href="about.html" class="active">关于</a></li>
+		</ul>
+		<p class="welcome-text">
+			欢迎来到<span class="name">...?!</span>的博客~
+		</p>
+	</div>
+
+
+	<div class="content whisper-content leacots-content details-content">
+		<div class="cont w1000">
+			<div class="whisper-list">
+				<div class="item-box">
+					<div class="review-version">
+						<div class="form-box">
+							<div class="article-cont">
+								<div class="title">
+									<h3 th:text="${blog.title}"></h3>
+									<p class="cont-info">
+										<span class="data" th:text="${blog.date}"></span><span
+											class="types" th:text="${blog.type}"></span>
+									</p>
+								</div>
+								<p th:utext="${blog.content}"></p>
+								<div class="btn-box">
+									<button class="layui-btn layui-btn-primary" id="prevBlog">上一篇</button>
+									<button class="layui-btn layui-btn-primary" id="nextBlog">下一篇</button>
+								</div>
+							</div>
+							<div class="form">
+								<form class="layui-form" th:action="@{~/blog/view(bid=${blog.id})}" method="post">
+									<div class="layui-form-item layui-form-text">
+										<div class="layui-input-block">
+											<textarea name="content" placeholder="既然来了，就说几句"
+												class="layui-textarea" id="content"></textarea>
+										</div>
+									</div>
+									<div class="layui-form-item">
+										<div class="layui-input-block" style="text-align: right;">
+											<button class="layui-btn definite" type="submit"
+												id="btn_comment">確定</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+						<div class="volume">
+							全部留言 <span th:text="${blog.comments.count}"></span>
+						</div>
+						<div class="list-cont" th:each="comment:${blog.comments.list}">
+
+							<div class="cont">
+								<div class="img">
+									<img src="../res/img/header.png" alt="">
+								</div>
+								<div class="text">
+									<p class="tit">
+										<span class="name" th:text="${comment.person}"></span><span
+											class="data" th:text="${comment.date}"></span>
+									</p>
+									<p class="ct" th:text="${comment.content}"></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="demo" style="text-align: center;">
+				<div class="layui-box layui-laypage layui-laypage-default"
+					id="layui-laypage-1">
+					<a class="layui-laypage-prev" id="prevPage">上一页</a> <a
+						class="defaultPage"
+						th:each="i:${#numbers.sequence(1,blog.comments.pageNumber)}"
+						th:if="${i} lt ${blog.comments.pageNumber}" th:text="${i}"></a> <span
+						class="layui-laypage-curr"><em class="layui-laypage-em"></em><em
+						th:text="${blog.comments.pageNumber}"></em></span> <a class="defaultPage"
+						th:each="j:${#numbers.sequence(blog.comments.pageNumber,blog.comments.total)}"
+						th:if="${j} gt ${blog.comments.pageNumber}" th:text="${j}"></a> <a
+						class="layui-laypage-next" id="nextPage">下一页</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="footer-wrap">
+		<div class="footer w1000">
+			<div class="qrcode">
+				<img src="../res/img/erweima.jpg">
+			</div>
+			<div class="practice-mode">
+				<img src="../res/img/down_img.jpg">
+				<div class="text">
+					<h4 class="title">我的联系方式</h4>
+					<p>
+						微信<span class="WeChat">1234567890</span>
+					</p>
+					<p>
+						手机<span class="iphone">1234567890</span>
+					</p>
+					<p>
+						邮箱<span class="email">1234567890@qq.com</span>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

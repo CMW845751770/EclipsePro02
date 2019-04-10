@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.tju.mapper.BlogMapper">
+	<resultMap type="Blog" id="blogMap">
+		<id column="id" property="id" />
+		<result column="title" property="title" />
+		<result column="keyword" property="keyword" />
+		<result column="type" property="type" />
+		<result column="date" property="date" />
+		<result column="content" property="content" />
+	</resultMap>
+	<select id="selBlogByPage" parameterType="pageinfo"
+		resultType="Blog">
+		select * from blog where type = #{type}
+		limit #{pi.pageStart},#{pi.pageSize}
+	</select>
+
+	<select id="selBlogCountByPage" resultType="long"
+		parameterType="PageInfo">
+		select count(*) from blog where type =#{0}
+	</select>
+
+	<select id="selBlogById" resultMap="blogMap">
+		select * from blog
+		where id =
+		${bid}
+	</select>
+	
+	<select id="selPrevBlogByBid" resultMap="blogMap" >
+		select * from blog where type = #{type} and id  &lt; #{bid} order by id asc limit 1
+	</select>
+	
+	<select id="selNextBlogByBid" resultMap="blogMap" >
+		select * from blog where type = #{type} and id  &gt; #{bid} order by id asc limit 1
+	</select>
+	
+</mapper>

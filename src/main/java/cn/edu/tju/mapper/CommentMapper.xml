@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.tju.mapper.CommentMapper">
+	<select id="selCommentsByBidAndPage" resultType="Comment">
+		select * from
+		comment where bid =#{bid}
+		limit
+		#{pi.pageStart},#{pi.pageSize}
+	</select>
+
+	<select id="selCommentCountByPage" resultType="long">
+		select count(*) from
+		comment where bid = #{bid}
+	</select>
+</mapper>
