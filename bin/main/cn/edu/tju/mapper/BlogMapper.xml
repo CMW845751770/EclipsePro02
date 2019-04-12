@@ -29,7 +29,7 @@
 	</select>
 	
 	<select id="selPrevBlogByBid" resultMap="blogMap" >
-		select * from blog where type = #{type} and id  &lt; #{bid} order by id asc limit 1
+		select * from blog where type = #{type} and id  &lt; #{bid} order by id desc limit 1
 	</select>
 	
 	<select id="selNextBlogByBid" resultMap="blogMap" >

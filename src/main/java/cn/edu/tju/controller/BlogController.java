@@ -29,14 +29,13 @@ public class BlogController {
 	private CommentService commentServiceImpl;
 
 	@RequestMapping("/show")
-	public ModelAndView showBlogByPage(@RequestParam(defaultValue = "1") int pageSize,
+	public String showBlogByPage(@RequestParam(defaultValue = "1") int pageSize,
 			@RequestParam(defaultValue = "1") int pageNumber,
-			@RequestParam(defaultValue = "Éè¼ÆÎÄÕÂ") String type) 
+			@RequestParam(defaultValue = "design") String type ,Model model) 
 	{
-		ModelAndView model = new ModelAndView("forward:/main.html") ; 
 		PageInfo pi = blogServiceImpl.selBlogByPage(pageSize, pageNumber, type);
-		model.addObject("blogPage", pi) ; 
-		return model ; 
+		model.addAttribute("blogPage", pi) ; 
+		return "forward:/main.html" ; 
 	}
 
 	@RequestMapping("/view")
@@ -76,7 +75,7 @@ public class BlogController {
 			@RequestParam(defaultValue = "1") int pageNumber) 
 	{
 		ModelAndView model = new ModelAndView() ; 
-		if(flag == 0)//ÉÏÒ»Æª²©¿Í
+		if(flag == 0)//ï¿½ï¿½Ò»Æªï¿½ï¿½ï¿½ï¿½
 		{ 
 			Blog blog = blogServiceImpl.selPrevByBid(bid, type) ;
 			if(blog == null)
@@ -86,6 +85,7 @@ public class BlogController {
 			}
 			else
 			{
+				System.out.println(blog.getId());
 				PageInfo pi = commentServiceImpl.selCommentsByBidAndPage(blog.getId(), pageSize, pageNumber);
 				blog.setComments(pi);
 				model.addObject("blog", blog) ;

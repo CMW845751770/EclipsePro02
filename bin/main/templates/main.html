@@ -14,11 +14,11 @@
 $(function()
 {
 	var pageSize = [[${blogPage.pageSize}]] ;
-	var pageNumber =[[${blogPage.pageNumber}]] ; 
+	var pageNumber =1 ; 
 	//点击设计文章
 	$("#designBlog").click(function()
 	{
-		var type = "设计文章"  ;
+		var type = "design"  ;
 		$.ajaxSettings.async = false;
 		$.get("/blog/show", {
 		pageSize : pageSize,
@@ -37,7 +37,7 @@ $(function()
 	//点击前端文章
 	$("#frontBlog").click(function()
 	{
-		var type = "前端文章"  ;
+		var type = "front"  ;
 		$.ajaxSettings.async = false;
 		$.get("/blog/show", {
 		pageSize : pageSize,
@@ -56,7 +56,7 @@ $(function()
 	//点击后端文章
 	$("#backBlog").click(function()
 	{
-		var type = "后端文章"  ;
+		var type = "back"  ;
 		$.ajaxSettings.async = false;
 		$.get("/blog/show", {
 		pageSize : pageSize,
@@ -97,16 +97,16 @@ $(function()
 						$("#designBlog").removeClass("active") ; 
 						$("#backBlog").removeClass("active") ; 
 						$("#frontBlog").removeClass("active") ;
-						if(type=="设计文章")
+						if(type=="design")
 						{
 							var sort ="designBlog" ; 
-						}else if(type =="前端文章")
+						}else if(type =="front")
 						{
 							var sort ="frontBlog" ; 
 						}
-						else if(type =="后端文章")
+						else if(type =="back")
 						{
-							var sort ="backfront" ; 
+							var sort ="backBlog" ; 
 						}
 						$("#"+sort).addClass("active") ;
 					});
@@ -133,16 +133,16 @@ $(function()
 						$("#designBlog").removeClass("active") ; 
 						$("#backBlog").removeClass("active") ; 
 						$("#frontBlog").removeClass("active") ;
-						if(type=="设计文章")
+						if(type=="design")
 						{
 							var sort ="designBlog" ; 
-						}else if(type =="前端文章")
+						}else if(type =="front")
 						{
 							var sort ="frontBlog" ; 
 						}
-						else if(type =="后端文章")
+						else if(type =="back")
 						{
-							var sort ="backfront" ; 
+							var sort ="backBlog" ; 
 						}
 						$("#"+sort).addClass("active") ;
 					});
@@ -156,7 +156,7 @@ $(function()
 	//点击页数的js
 	$(".defaultPage").click(function()
 	{
-		var type =$(".active").last().text() ;
+		var type =$(".active").last().text();
 		var aPageNumber=parseInt($(this).text());
 		$.ajaxSettings.async = false;
 				$.get("/blog/show", {
@@ -169,16 +169,16 @@ $(function()
 						$("#designBlog").removeClass("active") ; 
 						$("#backBlog").removeClass("active") ; 
 						$("#frontBlog").removeClass("active") ;
-						if(type=="设计文章")
+						if(type=="design")
 						{
 							var sort ="designBlog" ; 
-						}else if(type =="前端文章")
+						}else if(type =="front")
 						{
 							var sort ="frontBlog" ; 
 						}
-						else if(type =="后端文章")
+						else if(type =="back")
 						{
-							var sort ="backfront" ; 
+							var sort ="backBlog" ; 
 						}
 						$("#"+sort).addClass("active") ;
 					});
@@ -250,9 +250,9 @@ $(function()
 			<div class="title">
 				<span class="layui-breadcrumb" lay-separator="|"
 					style="visibility: visible;"> <a id="designBlog"
-					class="active">设计文章</a><span lay-separator>|</span> <a
-					id="frontBlog">前端文章</a> <span lay-separator>|</span><a
-					id="backBlog">后端文章</a>
+					class="active">design</a><span lay-separator>|</span> <a
+					id="frontBlog">front</a> <span lay-separator>|</span><a
+					id="backBlog">back</a>
 				</span>
 			</div>
 			<div class="list-item">
