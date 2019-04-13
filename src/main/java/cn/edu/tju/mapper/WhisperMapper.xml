@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.tju.mapper.WhisperMapper">
+	<resultMap type="Whisper" id="whisperMap">
+		<id column="id" property="id" />
+		<result column="like" property="like" />
+		<result column="date" property="date" />
+		<result column="content" property="content" />
+		<association property="commentCount" select="cn.edu.tju.mapper.WhisperCommentMapper.selWhisperCommentCount" column="id">
+		</association>
+		<collection property="imgList" select="cn.edu.tju.mapper.WhisperMapper.selWhisperImageById" column="id"></collection>
+	</resultMap>
+	<select id="selWhisperByPage" resultMap="whisperMap">
+		select * from whisper 
+	</select>
+</mapper>
