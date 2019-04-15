@@ -9,47 +9,212 @@
 	th:href="@{../res/layui/css/layui.css}">
 <link rel="stylesheet" type="text/css" th:href="@{../res/css/main.css}">
 <script type="text/javascript" th:src="@{~/js/jquery.js}"></script>
+<script type="text/javascript" th:src="@{~/res/layui/layui.js}"></script>
+	<script th:inline="javascript" type="text/javascript">
+		layui.config({
+			 base: '../res/js/util/'
+		}).use(
+				[ 'element', 'laypage', 'form', 'menu' ],
+				function() {
+					element = layui.element, laypage = layui.laypage,
+							form = layui.form, menu = layui.menu;
+					menu.init();
+					menu.off();
+					menu.submit()
+				})
+	</script>
 <script th:inline="javascript">
 	$(function() {
-		//收起和展开功能的js
-		$("#off").click(function() {
-			$.ajaxSettings.async = false;
-			$.get("/whisperComment/", function(data) 
+		//展示隐藏界面的js,需要wid提交请求获得评论内容还有需要知道是第几个的.list-cont
+		var showPages = function(data,wid,index) {
+			//sessionStorage.setItem("data", JSON.stringify(data));
+			var len = data.pi.list.length;
+			if(len==0)
 			{
-				var len = data.pi.list.length ;
-				var list = data.pi.list;
-				$(".list-cont").children(".cont").remove() ;
-				for(var i = 0 ; i < len ; i ++ )
-				{
-					$(".list-cont").prepend
-					(
-							"<div class='cont'>"+
-							"<div class='img'>"+
-								"<img src='../res/img/header.png' alt=''>"+
-							"</div>"+
-							"<div class='text'>"+
-								"<p class='tit'>"+
-									"<span class='name'>吳亦凡</span><span class='data'>2018/06/06</span>"+
-								"</p>"+
-								"<p class='ct'>敢问大师，师从何方？上古高人呐逐一地看完你的作品后，我的心久久不能平静！这世间怎么可能还有如此精辟的作品？我不敢相信自己的眼睛。自从改革开放以后，我就以为再也不会有任何作品能打动我，没想到今天看到这个如此精妙绝伦的作品好厉害！</p>"+
-							"</div>"+
-						"</div>"
-					);
+				alert("暂无评论！！")
+			}	
+			var list = data.pi.list;
+			$(".list-cont").eq(index).children(".cont").remove();
+			$(".list-cont").eq(index).children("#demo").remove();
+			$(".list-cont").eq(index).children("hr").remove();
+			for (var i = 0; i < len; i++) {
+				$(".list-cont").eq(index)
+						.prepend(
+								"<div class='cont'>"
+										+ "<div class='img'>"
+										+ "<img src='../res/img/header.png' alt=''>"
+										+ "</div>"
+										+ "<div class='text'>"
+										+ "<p class='tit'>"
+										+ "<span class='name'>吳亦凡</span><span class='data'>2018/06/06</span>"
+										+ "</p>"
+										+ "<p class='ct'>敢问大师，师从何方？上古高人呐逐一地看完你的作品后，我的心久久不能平静！这世间怎么可能还有如此精辟的作品？我不敢相信自己的眼睛。自从改革开放以后，我就以为再也不会有任何作品能打动我，没想到今天看到这个如此精妙绝伦的作品好厉害！</p>"
+										+ "</div>" + "</div>");
+			}
+
+			for (var i = 0; i < len; i++) {
+				var p1 = $(".list-cont").eq(index).children(".cont").eq(i).children(
+						".text").children("p").eq(0);
+				var p2 = $(".list-cont").eq(index).children(".cont").eq(i).children(
+						".text").children("p").eq(1);
+				p1.children("span").eq(0).text(list[i].person);
+				p1.children("span").eq(1).text(list[i].date);
+				p2.text(list[i].content);
+			}
+			//上一页
+			var pageHtml = "";
+			pageHtml = pageHtml
+					+ "<hr>"
+					+ "<div id='demo' style='text-align: center;'>"
+					+ "<div class='layui-box layui-laypage layui-laypage-default' id='layui-laypage-1'>"
+					+ "<a class='layui-laypage-prev'>上一页</a>"
+			//1~pageNum-1
+			for (var i = 1; i <= data.pi.pageNum - 1; i++) {
+				pageHtml += "<a class='defaultPage'>" + i + "</a>"
+			}
+			//pageNum
+			pageHtml = pageHtml
+					+ "<span class='layui-laypage-curr'><em class='layui-laypage-em'>"
+					+ data.pi.pageNum + "</em></span>"
+			//pageNum+1 ~ pages
+			for (var i = data.pi.pageNum + 1; i <= data.pi.pages; i++) {
+				pageHtml += "<a class='defaultPage'>" + i + "</a>"
+			}
+			//下一页
+			pageHtml = pageHtml
+					+ "<a class='layui-laypage-next'>下一页</a>"
+					+ "</div>" + "</div>"
+			$(".list-cont").eq(index).append(pageHtml);
+
+			//上一页评论的js
+			$(".layui-laypage-prev").eq(index).click(function() {
+				//var dataTemp = sessionStorage.getItem("data");//获取键为allJson的字符串
+				//var data = JSON.parse(dataTemp);//将字符串抓换成对象
+				var pageSize = data.pi.pageSize;
+				var pageNumber = data.pi.pageNum;
+				if (data.pi.isFirstPage) {
+					return false;
 				}
-				
-				for(var i = 0 ; i < len ; i ++)
-				{
-					var p1= $(".list-cont").children(".cont").eq(i).children(".text").children("p").eq(0) ; 
-					var p2= $(".list-cont").children(".cont").eq(i).children(".text").children("p").eq(1) ; 
-					p1.children("span").eq(0).text(list[i].person) ; 
-					p1.children("span").eq(1).text(list[i].date) ;
-					p2.text(list[i].content) ; 
+				$.ajaxSettings.async = false;
+				$.get("/whisperComment/" + wid, {
+					pageSize : pageSize,
+					pageNumber : pageNumber - 1,
+				}, function(data) {
+					showPages(data,wid,index);
+				});
+				$.ajaxSettings.async = true;
+				return false;
+			})
+			//点击下一页的js
+			$(".layui-laypage-next").eq(index).click(function() {
+				//var dataTemp = sessionStorage.getItem("data");//获取键为allJson的字符串
+				//var data = JSON.parse(dataTemp);//将字符串抓换成对象
+				var pageSize = data.pi.pageSize;
+				var pageNumber = data.pi.pageNum;
+				if (data.pi.isLastPage) {
+					return false;
 				}
-				
-			});
+				$.ajaxSettings.async = false;
+				$.get("/whisperComment/" + wid, {
+					pageSize : pageSize,
+					pageNumber : pageNumber + 1,
+				}, function(data) {
+					showPages(data,wid,index);
+				});
+				$.ajaxSettings.async = true;
+				return false;
+			})
+
+			//点击页数的js
+			$(".defaultPage").click(function() {
+			//	var dataTemp = sessionStorage.getItem("data");//获取键为allJson的字符串
+				//var data = JSON.parse(dataTemp);//将字符串抓换成对象
+				var pageSize = data.pi.pageSize;
+				var aPageNumber = parseInt($(this).text());
+				$.ajaxSettings.async = false;
+				$.get("/whisperComment/" + wid, {
+					pageSize : pageSize,
+					pageNumber : aPageNumber,
+				}, function(data) {
+					showPages(data,wid,index);
+				});
+				$.ajaxSettings.async = true;
+				return false;
+			})
+		}//end of fucntion
+
+		//收起和展开功能的js
+		$(".extend").click(function() {
+			var wid = $(this).parent(".off").children("#hiddenId").val();
+			var index = $(this).parent(".off").children("#hiddenIndex").val();
+			$.ajaxSettings.async = false;
+			$.get("/whisperComment/" + wid, function(data) {
+				showPages(data,wid,index);
+			});//endofAjax
 			$.ajaxSettings.async = true;
-		})
+
+		})//endofClick
 	});
+</script>
+<script th:inline="javascript">
+$(function()
+{
+	var pi = [[${pi}]] ; 
+	//上一页评论的js
+	$("#prevPage").click(function()
+	{
+		if(pi.isFirstpage)
+		{
+			return false ; 
+		}
+				$.ajaxSettings.async = false;
+				$.get("/whisper", {
+				pageSize : pi.pageSize,
+				pageNumber  : pi.prePage ,
+					},function(html)
+					{
+						$("body").html(html);
+					});
+				$.ajaxSettings.async = true;
+			return false;
+	})
+	//点击下一页的js
+	$("#nextPage").click(function()
+	{
+		if(pi.isLastPage)
+		{
+			return false ; 
+		}
+				$.ajaxSettings.async = false;
+				$.get("/whisper", {
+				pageSize : pi.pageSize,
+				pageNumber  : pi.nextPage ,
+					},function(html)
+					{
+						$("body").html(html);
+					});
+				$.ajaxSettings.async = true;
+			return false;
+
+	})
+	
+	//点击页数的js
+	$(".default").click(function()
+	{
+		var aPageNumber=parseInt($(this).text());
+		$.ajaxSettings.async = false;
+				$.get("/whisper", {
+				pageSize : pi.pageSize,
+				pageNumber  : aPageNumber,
+					},function(html)
+					{
+						$("body").html(html);
+					});
+				$.ajaxSettings.async = true;
+		return false ; 
+	})
+	
+})
 </script>
 
 </head>
@@ -85,7 +250,7 @@
 	<div class="content whisper-content">
 		<div class="cont">
 			<div class="whisper-list">
-				<div class="item-box" th:each="whisper:${pi.getList()}">
+				<div class="item-box" th:each="whisper,vs:${pi.getList()}">
 					<div class="item">
 						<div class="whisper-title">
 							<i class="layui-icon layui-icon-date"></i><span class="date"
@@ -107,7 +272,10 @@
 									th:text="${whisper.commentCount}">1200</span>
 							</p>
 							<p class="off" off>
-								<span id="off">展开</span><i class="layui-icon layui-icon-down"></i>
+								<span class="extend">展开</span><i
+									class="layui-icon layui-icon-down"></i> <input type="hidden"
+									th:attr="value=${whisper.id}" id="hiddenId"> <input
+									type="hidden" th:attr="value=${vs.index}" id="hiddenIndex">
 							</p>
 						</div>
 					</div>
@@ -140,17 +308,6 @@
 										不能平静！这世间怎么可能还有如此精辟的作品？我不敢相信自己的眼睛。自从改革开放以后，我就以为再也不会有任何作品能打动我，没想到今天看到这个如此精妙绝伦的作品好厉害！</p>
 								</div>
 							</div>
-							<hr>
-							<div id="demo" style="text-align: center;">
-								<div class="layui-box layui-laypage layui-laypage-default"
-									id="layui-laypage-1">
-									<a class="layui-laypage-prev" id="prevPage">上一页</a> <a
-										class="defaultPage">0</a> <span class="layui-laypage-curr"><em
-										class="layui-laypage-em"></em><em>1</em></span> <a
-										class="defaultPage">2</a> <a class="layui-laypage-next"
-										id="nextPage">下一页</a>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -159,17 +316,16 @@
 		<div id="demo" style="text-align: center;">
 			<div class="layui-box layui-laypage layui-laypage-default"
 				id="layui-laypage-1">
-				<a class="layui-laypage-prev" id="prevPage">上一页</a> <a
-					class="defaultPage" th:each="i:${#numbers.sequence(1,pi.pageNum)}"
+				<a class="layui-laypage-prev" id="prevPage">上一页</a> <a class="default"
+					th:each="i:${#numbers.sequence(1,pi.pageNum)}"
 					th:if="${i} lt ${pi.pageNum}" th:text="${i}"></a> <span
 					class="layui-laypage-curr"><em class="layui-laypage-em"></em><em
-					th:text="${pi.pageNum}"></em></span> <a class="defaultPage"
+					th:text="${pi.pageNum}"></em></span> <a class="default"
 					th:each="j:${#numbers.sequence(pi.pageNum,pi.pages)}"
 					th:if="${j} gt ${pi.pageNum}" th:text="${j}"></a> <a
 					class="layui-laypage-next" id="nextPage">下一页</a>
 			</div>
 		</div>
-	</div>
 	</div>
 	<script type="text/html" id="laytplCont">
     <div class="cont">
@@ -204,19 +360,5 @@
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript" th:src="@{../res/layui/layui.js}"></script>
-	<script type="text/javascript">
-		layui.config({
-			base : '../res/js/util/'
-		}).use(
-				[ 'element', 'laypage', 'form', 'menu' ],
-				function() {
-					element = layui.element, laypage = layui.laypage,
-							form = layui.form, menu = layui.menu;
-					menu.init();
-					menu.off();
-					menu.submit()
-				})
-	</script>
 </body>
 </html>

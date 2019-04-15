@@ -1,10 +1,6 @@
 package cn.edu.tju.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.Resource;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +21,7 @@ public class WhisperController
 	
 	
 	@GetMapping()
-	public String showWhisperByPage(@RequestParam(defaultValue = "1") int pageSize,
+	public String showWhisperByPage(@RequestParam(defaultValue = "2") int pageSize,
 			@RequestParam(defaultValue = "1") int pageNumber,Model model) 
 	{
 		PageInfo<Whisper> pi = whisperServiceImpl.selWhisperByPage(pageSize, pageNumber) ;

@@ -8,8 +8,8 @@ import cn.edu.tju.pojo.WhisperComment;
 
 public interface WhisperCommentMapper 
 {
-	@Select("select count(*) from whisper_comment where id = #{0}")
+	@Select("select count(*) from whisper_comment where wid = #{0}")
 	int selWhisperCommentCount(int id) ; 
 	
-	List<WhisperComment> selWhisperCommentByPage()  ;
+	List<WhisperComment> selWhisperCommentByPage(int wid)  ;
 }

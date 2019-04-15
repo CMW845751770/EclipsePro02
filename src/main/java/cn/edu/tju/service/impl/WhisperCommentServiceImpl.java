@@ -22,10 +22,10 @@ public class WhisperCommentServiceImpl implements WhisperCommentService
 	private WhisperCommentMapper whisperCommentMapper ; 
 	
 	@Override
-	public PageInfo<WhisperComment> selWhisperCommentByPage(int pageSize, int pageNumber) 
+	public PageInfo<WhisperComment> selWhisperCommentByPage(int pageSize, int pageNumber,int wid) 
 	{
 		PageHelper.startPage(pageNumber, pageSize) ; 
-		List<WhisperComment> list = whisperCommentMapper.selWhisperCommentByPage() ; 
+		List<WhisperComment> list = whisperCommentMapper.selWhisperCommentByPage(wid) ; 
 		System.out.println(list);
 		PageInfo<WhisperComment> pi = new PageInfo<>(list) ; 
 		return pi;

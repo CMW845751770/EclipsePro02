@@ -4,6 +4,6 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.tju.mapper.WhisperCommentMapper">
 	<select id="selWhisperCommentByPage" resultType="WhisperComment">
-		select * from whisper_comment 
+		select * from whisper_comment where wid = #{0} 
 	</select>
 </mapper>

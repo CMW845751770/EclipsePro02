@@ -5,5 +5,5 @@ import cn.edu.tju.pojo.WhisperComment;
 
 public interface WhisperCommentService 
 {
-	PageInfo<WhisperComment> selWhisperCommentByPage(int pageSize , int pageNumber) ; 
+	PageInfo<WhisperComment> selWhisperCommentByPage(int pageSize , int pageNumber,int wid) ; 
 }
