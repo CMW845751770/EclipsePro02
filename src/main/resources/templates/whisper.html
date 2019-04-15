@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
@@ -9,20 +10,6 @@
 	th:href="@{../res/layui/css/layui.css}">
 <link rel="stylesheet" type="text/css" th:href="@{../res/css/main.css}">
 <script type="text/javascript" th:src="@{~/js/jquery.js}"></script>
-<script type="text/javascript" th:src="@{~/res/layui/layui.js}"></script>
-	<script th:inline="javascript" type="text/javascript">
-		layui.config({
-			 base: '../res/js/util/'
-		}).use(
-				[ 'element', 'laypage', 'form', 'menu' ],
-				function() {
-					element = layui.element, laypage = layui.laypage,
-							form = layui.form, menu = layui.menu;
-					menu.init();
-					menu.off();
-					menu.submit()
-				})
-	</script>
 <script th:inline="javascript">
 	$(function() {
 		//展示隐藏界面的js,需要wid提交请求获得评论内容还有需要知道是第几个的.list-cont
@@ -159,6 +146,7 @@
 <script th:inline="javascript">
 $(function()
 {
+	//实现Whisper的分页
 	var pi = [[${pi}]] ; 
 	//上一页评论的js
 	$("#prevPage").click(function()
@@ -216,7 +204,44 @@ $(function()
 	
 })
 </script>
-
+<script th:inline="javascript">
+$(function()
+{
+	//评论功能的js
+	$(".layui-form").submit(function()
+	{
+		var content = $(this).children().eq(0).children().children(".layui-textarea").val() ;
+		if(content.length==0)
+		{
+			layer.msg('请输入内容') ; 	
+			return false ; 
+		}
+		var pi = [[${pi}]] ; 
+		var person=[[${#httpSession.getAttribute('userName')}]] ;
+		var wid = $(this).parents(".item-box").children(".item").children(".op-list").children(".off").children("#hiddenId").val() ; 
+		var index = $(this).parents(".item-box").children(".item").children(".op-list").children(".off").children("#hiddenIndex").val() ; 
+		$.ajaxSettings.async = false;
+		$.post("/whisperComment", {
+				pageSize : pi.pageSize,
+				pageNumber  : pi.pageNum,
+				content : content , 
+				person : person , 
+				wid : wid 
+					},function(html)
+					{
+						$("body").html(html);
+						var off = $(".item-box").eq(index).children(".item").children(".op-list").children(".off") ; 
+						off.children(".extend").text('收起');
+						off.children(".layui-icon").attr('class','layui-icon layui-icon-up') ;
+				        off.attr('off','true')
+				        $(".item-box").eq(index).children().eq(1).removeClass('layui-hide') ; 
+				        $(".extend").eq(index).click() ; 
+					});
+					$.ajaxSettings.async =  true;
+		return false ; 
+	})
+})
+</script>
 </head>
 <body>
 	<div class="header">
@@ -240,6 +265,11 @@ $(function()
 			<li class="layui-nav-item"><a th:href="@{~/leacots.html}">留言</a></li>
 			<li class="layui-nav-item"><a th:href="@{~/album.html}">相册</a></li>
 			<li class="layui-nav-item"><a th:href="@{~/about.html}">关于</a></li>
+			<li class="layui-nav-item"><shiro:guest>
+					<a th:href="@{~/login.html}">请登录</a>
+				</shiro:guest> <shiro:authenticated>
+					<a th:href="@{~/user/logout}">退出</a>
+				</shiro:authenticated></li>
 		</ul>
 		<p class="welcome-text">
 			欢迎来到<span class="name">...?!</span>的博客~
@@ -282,7 +312,7 @@ $(function()
 					<div class="review-version layui-hide" layui-hide>
 						<div class="form">
 							<img src="../res/img/header2.png">
-							<form class="layui-form" action="">
+							<form class="layui-form" th:action="@{#}">
 								<div class="layui-form-item layui-form-text">
 									<div class="layui-input-block">
 										<textarea name="desc" class="layui-textarea"></textarea>
@@ -290,7 +320,7 @@ $(function()
 								</div>
 								<div class="layui-form-item">
 									<div class="layui-input-block" style="text-align: right;">
-										<button class="layui-btn definite">確定</button>
+										<button class="layui-btn definite" type="submit">確定</button>
 									</div>
 								</div>
 							</form>
@@ -316,8 +346,8 @@ $(function()
 		<div id="demo" style="text-align: center;">
 			<div class="layui-box layui-laypage layui-laypage-default"
 				id="layui-laypage-1">
-				<a class="layui-laypage-prev" id="prevPage">上一页</a> <a class="default"
-					th:each="i:${#numbers.sequence(1,pi.pageNum)}"
+				<a class="layui-laypage-prev" id="prevPage">上一页</a> <a
+					class="default" th:each="i:${#numbers.sequence(1,pi.pageNum)}"
 					th:if="${i} lt ${pi.pageNum}" th:text="${i}"></a> <span
 					class="layui-laypage-curr"><em class="layui-laypage-em"></em><em
 					th:text="${pi.pageNum}"></em></span> <a class="default"
@@ -327,17 +357,6 @@ $(function()
 			</div>
 		</div>
 	</div>
-	<script type="text/html" id="laytplCont">
-    <div class="cont">
-      <div class="img">
-        <img src="{{d.avatar}}" alt="">
-      </div>
-      <div class="text">
-        <p class="tit"><span class="name">{{d.name}}</span><span class="data">2018/06/06</span></p>
-        <p class="ct">{{d.cont}}</p>
-      </div>
-    </div>
-  </script>
 	<div class="footer-wrap">
 		<div class="footer w1000">
 			<div class="qrcode">
@@ -360,5 +379,19 @@ $(function()
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript" th:src="@{~/res/layui/layui.js}"></script>
+	<script th:inline="javascript" type="text/javascript">
+		layui.config({
+			 base: '../res/js/util/'
+		}).use(
+				[ 'element', 'laypage', 'form', 'menu' ],
+				function() {
+					element = layui.element, laypage = layui.laypage,
+							form = layui.form, menu = layui.menu;
+					menu.init();
+					menu.off();
+					menu.submit()
+				})
+	</script>
 </body>
 </html>

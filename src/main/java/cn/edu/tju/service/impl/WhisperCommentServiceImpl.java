@@ -30,5 +30,10 @@ public class WhisperCommentServiceImpl implements WhisperCommentService
 		PageInfo<WhisperComment> pi = new PageInfo<>(list) ; 
 		return pi;
 	}
+
+	@Override
+	public int insWhisperComment(WhisperComment wc) {
+		return whisperCommentMapper.insWhisperComment(wc);
+	}
 	
 }

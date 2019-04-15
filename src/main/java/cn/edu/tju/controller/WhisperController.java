@@ -24,7 +24,9 @@ public class WhisperController
 	public String showWhisperByPage(@RequestParam(defaultValue = "2") int pageSize,
 			@RequestParam(defaultValue = "1") int pageNumber,Model model) 
 	{
+		System.out.println(pageSize+"-----"+pageNumber);
 		PageInfo<Whisper> pi = whisperServiceImpl.selWhisperByPage(pageSize, pageNumber) ;
+		System.out.println(pi);
 		model.addAttribute("pi", pi) ; 
 		return "forward:/whisper.html";
 	}
