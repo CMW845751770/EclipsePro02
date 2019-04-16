@@ -6,8 +6,8 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <title>Document</title>
-<link rel="stylesheet" type="text/css" th:href="@{../res/layui/css/layui.css}">
-<link rel="stylesheet" type="text/css" th:href="@{../res/css/main.css}">
+<link rel="stylesheet" type="text/css" th:href="@{~/res/layui/css/layui.css}">
+<link rel="stylesheet" type="text/css" th:href="@{~/res/css/main.css}">
 <!--加载meta IE兼容文件-->
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -42,7 +42,7 @@
 				</shiro:authenticated></li>
 		</ul>
 		<p class="welcome-text">
-			欢迎来到<span class="name">小明</span>的博客~
+			欢迎来到<span class="name">...?!</span>的博客~
 		</p>
 	</div>
 
@@ -53,10 +53,10 @@
 					<h3>我的介绍</h3>
 				</div>
 				<div class="cont">
-					<img src="../res/img/xc_img1.jpg">
+					<img th:src="@{~/img/IMG_1857.JPG}">
 					<div class="per-info">
 						<p>
-							<span class="name">小明</span><br /> <span class="age">24岁</span><br />
+							<span class="name">...?!</span><br /> <span class="age">24岁</span><br />
 							<span class="Career">设计师, 前端工程师</span><br /> <span
 								class="interest">爱好旅游,打游戏</span>
 						</p>
@@ -71,26 +71,26 @@
 					<div class="layui-row">
 						<div class="layui-col-xs6 layui-col-sm3 layui-col-md3">
 							<div class="cont-box">
-								<img src="../res/img/gr_img2.jpg">
-								<p>80%</p>
+								<img th:src="@{~/img/spring.jpg}" width="86px" height="86px">
+								<p>1%</p>
+							</div>
+						</div>
+						<div class="layui-col-xs6 la=yui-col-sm3 layui-col-md3">
+							<div class="cont-box">
+								<img th:src="@{~/img/mybatis.jpg}" width="86px" height="86px">
+								<p>1%</p>
 							</div>
 						</div>
 						<div class="layui-col-xs6 layui-col-sm3 layui-col-md3">
 							<div class="cont-box">
-								<img src="../res/img/gr_img3.jpg">
-								<p>80%</p>
+								<img th:src="@{~/img/shiro.png}" width="86px" height="86px">
+								<p>1%</p>
 							</div>
 						</div>
 						<div class="layui-col-xs6 layui-col-sm3 layui-col-md3">
 							<div class="cont-box">
-								<img src="../res/img/gr_img4.jpg">
-								<p>80%</p>
-							</div>
-						</div>
-						<div class="layui-col-xs6 layui-col-sm3 layui-col-md3">
-							<div class="cont-box">
-								<img src="../res/img/gr_img5.jpg">
-								<p>80%</p>
+								<img th:src="@{~/img/thymeleaf.png}" width="86px" height="86px">
+								<p>1%</p>
 							</div>
 						</div>
 					</div>
