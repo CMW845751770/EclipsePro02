@@ -31,4 +31,10 @@ public class WhisperServiceImpl implements WhisperService
 		return pi;
 	}
 
+	@Override
+	public int updLikeById(int id, int newLike) 
+	{
+		return whisperMapper.updLikeById(id, newLike);
+	}
+
 }

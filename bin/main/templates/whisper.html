@@ -242,6 +242,56 @@ $(function()
 	})
 })
 </script>
+
+<script th:inline="javascript">
+$(function()
+{
+	//点赞功能的js
+	var count = $('.list-cont .cont').length;
+    $('.volume span').text(count);
+    $('.op-list .like').click(function(){
+     var id = $(this).parent().children().eq(2).children("#hiddenId").val() ; 
+      var oSpan =  $(this).children('span');
+      var num = parseInt($(oSpan).text())
+      var off = $(this).attr('off')
+        if(off){
+        	$.ajaxSettings.async = false;
+    		$.get("/whisper/"+id+"/like", 
+    				{
+    					newLike: num-1
+    				},function(data)
+    					{
+    					if(data.msg!='success')
+						{
+							return false ; 
+						}
+    					});
+    					$(this).removeClass('active');
+	          			off = true;
+	          			$(oSpan).text(num-1)
+	          			$(this).attr('off','')
+    					$.ajaxSettings.async =  true;
+        }else{
+        	$.ajaxSettings.async = false;
+    		$.get("/whisper/"+id+"/like", 
+    				{
+    					newLike: num+1
+    				},function(data)
+    					{
+    						if(data.msg!='success')
+    						{
+    							return false ; 
+    						}
+    					});
+    				$(this).addClass('active');
+	         		off = false;
+	          		$(oSpan).text(num+1)
+	          		$(this).attr('off','true')
+    				$.ajaxSettings.async =  true;
+        }
+      })
+})
+</script>
 </head>
 <body>
 	<div class="header">
@@ -295,7 +345,7 @@ $(function()
 						<div class="op-list">
 							<p class="like">
 								<i class="layui-icon layui-icon-praise"></i><span
-									th:text="${whisper.like}">1200</span>
+									th:text="${whisper.likes}">1200</span>
 							</p>
 							<p class="edit">
 								<i class="layui-icon layui-icon-reply-fill"></i><span

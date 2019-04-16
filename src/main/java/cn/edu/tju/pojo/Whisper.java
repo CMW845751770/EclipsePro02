@@ -8,7 +8,7 @@ public class Whisper implements Serializable
 	private int id ;
 	private String content ; 
 	private String date ; 
-	private int like ; 
+	private int likes ; 
 	private int commentCount ;
 	private List<WhisperImage> imgList ; 
 	public List<WhisperImage> getImgList() {
@@ -35,11 +35,11 @@ public class Whisper implements Serializable
 	public void setDate(String date) {
 		this.date = date;
 	}
-	public int getLike() {
-		return like;
+	public int getLikes() {
+		return likes;
 	}
-	public void setLike(int like) {
-		this.like = like;
+	public void setLikes(int likes) {
+		this.likes = likes;
 	}
 	public int getCommentCount() {
 		return commentCount;
@@ -52,7 +52,7 @@ public class Whisper implements Serializable
 	}
 	@Override
 	public String toString() {
-		return "Whisper [id=" + id + ", content=" + content + ", date=" + date + ", like=" + like + ", commentCount="
+		return "Whisper [id=" + id + ", content=" + content + ", date=" + date + ", likes=" + likes + ", commentCount="
 				+ commentCount + ", imgList=" + imgList + "]";
 	}
 	

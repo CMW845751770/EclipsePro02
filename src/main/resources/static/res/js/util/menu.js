@@ -29,22 +29,6 @@ layui.define(['mm','jquery'],function(exports){
       };
     var count = $('.list-cont .cont').length;
     $('.volume span').text(count);
-    $('.op-list .like').on('click',function(){
-      var oSpan =  $(this).children('span');
-      var num = parseInt($(oSpan).text())
-      var off = $(this).attr('off')
-        if(off){
-          $(this).removeClass('active');
-          off = true;
-          $(oSpan).text(num-1)
-          $(this).attr('off','')
-        }else{
-          $(this).addClass('active');
-          off = false;
-          $(oSpan).text(num+1)
-          $(this).attr('off','true')
-        }
-      })
     },
     off:function(){
       $('.off').on('click',function(){
