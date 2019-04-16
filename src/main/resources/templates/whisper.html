@@ -12,7 +12,7 @@
 <script type="text/javascript" th:src="@{~/js/jquery.js}"></script>
 <script th:inline="javascript">
 	$(function() {
-		//展示隐藏界面的js,需要wid提交请求获得评论内容还有需要知道是第几个的.list-cont
+		//展示某篇whisper的隐藏界面的js,需要wid提交请求获得评论内容还有需要知道是第几个的.list-cont
 		var showPages = function(data,wid,index) {
 			//sessionStorage.setItem("data", JSON.stringify(data));
 			var len = data.pi.list.length;
@@ -74,7 +74,7 @@
 			$(".list-cont").eq(index).append(pageHtml);
 
 			//上一页评论的js
-			$(".layui-laypage-prev").eq(index).click(function() {
+			$(".list-cont").eq(index).children("#demo").children().children(".layui-laypage-prev").click(function() {
 				//var dataTemp = sessionStorage.getItem("data");//获取键为allJson的字符串
 				//var data = JSON.parse(dataTemp);//将字符串抓换成对象
 				var pageSize = data.pi.pageSize;
@@ -93,7 +93,7 @@
 				return false;
 			})
 			//点击下一页的js
-			$(".layui-laypage-next").eq(index).click(function() {
+			$(".list-cont").eq(index).children("#demo").children().children(".layui-laypage-next").click(function() {
 				//var dataTemp = sessionStorage.getItem("data");//获取键为allJson的字符串
 				//var data = JSON.parse(dataTemp);//将字符串抓换成对象
 				var pageSize = data.pi.pageSize;
