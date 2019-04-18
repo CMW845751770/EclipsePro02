@@ -27,8 +27,6 @@ layui.define(['mm','jquery'],function(exports){
           $('.menu').removeClass('on');
         }
       };
-    var count = $('.list-cont .cont').length;
-    $('.volume span').text(count);
     },
     off:function(){
       $('.off').on('click',function(){
