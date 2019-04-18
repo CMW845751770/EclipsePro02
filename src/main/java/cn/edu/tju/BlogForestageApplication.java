@@ -11,5 +11,5 @@ public class BlogForestageApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BlogForestageApplication.class, args);
 	}
-}
+} 
  
