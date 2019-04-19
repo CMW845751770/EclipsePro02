@@ -119,14 +119,14 @@ $(function()
 		</h1>
 		<div class="nav">
 			<a th:href="@{~/blog/show}">文章</a> <a th:href="@{~/whisper}">微语</a> <a
-				th:href="@{~/leacot}" class="active">留言</a> <a href="album.html">相册</a>
+				th:href="@{~/leacot}" class="active">留言</a> <a th:href="@{~/album}">相册</a>
 			<a href="about.html">关于</a>
 		</div>
 		<ul class="layui-nav header-down-nav">
 			<li class="layui-nav-item"><a th:href="@{~/blog/show}">文章</a></li>
 			<li class="layui-nav-item"><a th:href="@{~/whisper}">微语</a></li>
 			<li class="layui-nav-item"><a th:href="@{~/leacot}" class="active">留言</a></li>
-			<li class="layui-nav-item"><a href="album.html">相册</a></li>
+			<li class="layui-nav-item"><a th:href="@{~/album}">相册</a></li>
 			<li class="layui-nav-item"><a href="about.html">关于</a></li>
 			<li class="layui-nav-item"><shiro:guest>
 					<a th:href="@{~/login.html}">请登录</a>
@@ -223,16 +223,18 @@ $(function()
 	<script type="text/javascript" th:src="@{../res/layui/layui.js}"></script>
 	<script type="text/javascript">
 	layui.config({
-		 base: '../res/js/util/'
-	}).use(
-			[ 'element', 'laypage', 'form', 'menu' ],
-			function() {
-				element = layui.element, laypage = layui.laypage,
-						form = layui.form, menu = layui.menu;
-				menu.init();
-				menu.off();
-				menu.submit()
-			})
+	      base: '../res/js/util/'
+	    }).use(['element','laypage','form','layer','menu'],function(){
+	      element = layui.element,form = layui.form,layer = layui.layer,menu = layui.menu;
+	      layer.photos({
+	        photos: '#layer-photos-demo'
+	        ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+	        ,tab:function(pic,layero){
+	          console.log(pic,layero)
+	        }
+	      });
+	      menu.init(); 
+	    })
 	</script>
 </body>
 </html>

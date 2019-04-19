@@ -181,7 +181,7 @@ $(function()
 		</h1>
 		<div class="nav">
 			<a th:href="@{~/blog/show}" class="active">文章</a> <a th:href="@{~/whisper}">微语</a> <a
-				th:href="@{~/leacot}">留言</a> <a href="album.html">相册</a> <a
+				th:href="@{~/leacot}">留言</a> <a th:href="@{~/album}">相册</a> <a
 				href="about.html" >关于</a>
 		</div>
 		<ul class="layui-nav header-down-nav">
@@ -189,7 +189,7 @@ $(function()
 				class="active">文章</a></li>
 			<li class="layui-nav-item"><a th:href="@{~/whisper}">微语</a></li>
 			<li class="layui-nav-item"><a th:href="@{~/leacot}">留言</a></li>
-			<li class="layui-nav-item"><a th:href="@{~/album.html}">相册</a></li>
+			<li class="layui-nav-item"><a th:href="@{~/album}">相册</a></li>
 			<li class="layui-nav-item"><a th:href="@{~/about.html}">关于</a></li>
 			<li class="layui-nav-item"><shiro:guest>
 					<a th:href="@{~/login.html}">请登录</a>

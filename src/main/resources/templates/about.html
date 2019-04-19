@@ -26,14 +26,14 @@
 		</h1>
 		<div class="nav">
 			<a th:href="@{~/blog/show}">文章</a> <a th:href="@{~/whisper}">微语</a> <a
-				th:href="@{~/leacot}">留言</a> <a href="album.html">相册</a> <a
+				th:href="@{~/leacot}">留言</a> <a th:href="@{~/album}">相册</a> <a
 				href="about.html" class="active">关于</a>
 		</div>
 		<ul class="layui-nav header-down-nav">
 			<li class="layui-nav-item"><a th:href="@{~/blog/show}">文章</a></li>
 			<li class="layui-nav-item"><a th:href="@{~/whisper}">微语</a></li>
 			<li class="layui-nav-item"><a th:href="@{~/leacot}">留言</a></li>
-			<li class="layui-nav-item"><a href="album.html">相册</a></li>
+			<li class="layui-nav-item"><a th:href="@{~/album}">相册</a></li>
 			<li class="layui-nav-item"><a href="about.html" class="active">关于</a></li>
 			<li class="layui-nav-item"><shiro:guest>
 					<a th:href="@{~/login.html}">请登录</a>
@@ -57,7 +57,7 @@
 					<div class="per-info">
 						<p>
 							<span class="name">...?!</span><br /> <span class="age">24岁</span><br />
-							<span class="Career">设计师, 前端工程师</span><br /> <span
+							<span class="Career">后端工程师</span><br /> <span
 								class="interest">爱好旅游,打游戏</span>
 						</p>
 					</div>

@@ -1,6 +1,8 @@
 package cn.edu.tju.pojo;
 
-public class Leacot 
+import java.io.Serializable;
+
+public class Leacot implements Serializable
 {
 	private int id ; 
 	private String person ; 
